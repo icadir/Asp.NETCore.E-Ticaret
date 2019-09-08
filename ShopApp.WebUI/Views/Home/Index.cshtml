@@ -1,19 +1,26 @@
 ﻿@model ShopApp.WebUI.Models.ProductListModel
-{
-    Layout = null;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-    <link href="/modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-</head>
-<body>
-    @foreach (var item in Model.Products)
-    {
-        <p>@item.Name</p>
-    }
-</body>
-</html>
+<div class="row">
+    <div class="col-md-3">
+        <ul class="list-group">
+            <li class="list-group-item">Telefon</li>
+            <li class="list-group-item">Bilgisayar</li>
+            <li class="list-group-item">Elektronik</li>
+        </ul>
+    </div>
+    <div class="col-md-9">
+        @Html.Partial("_slider")
+        @foreach (var item in Model.Products)
+        {
+            <p>@item.Name</p>
+        }
+    </div>
+</div>
+
+
+
