@@ -23,9 +23,9 @@ namespace ShopApp.DataAccess.Concrete.Memory
         {
             var products = new List<Product>()
             {
-                new Product(){Id=1,ProductName="Samgung s6",ImageUrl="1.jpg",Price=1000},
-                new Product(){Id=2,ProductName="Samgung s7",ImageUrl="2.jpg",Price=2000},
-                new Product(){Id=3,ProductName="Samgung s8",ImageUrl="3.jpg",Price=3000},
+                new Product(){Id=1,Name="Samgung s6",ImageUrl="1.jpg",Price=1000},
+                new Product(){Id=2,Name="Samgung s7",ImageUrl="2.jpg",Price=2000},
+                new Product(){Id=3,Name="Samgung s8",ImageUrl="3.jpg",Price=3000},
             };
             return products;
         }
