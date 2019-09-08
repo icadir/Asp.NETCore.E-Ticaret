@@ -2,7 +2,6 @@
 using ShopApp.DataAccess.Abstract;
 using ShopApp.Entities.Entities;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ShopApp.Business.Concrete
 {
@@ -25,13 +24,19 @@ namespace ShopApp.Business.Concrete
 
         public List<Product> GetAll()
         {
-            return _productDal.GetAll().ToList();
+            return _productDal.GetAll();
         }
 
         public Product GetById(int id)
         {
             return _productDal.GetById(id);
         }
+
+        public List<Product> GetPopulerProducts()
+        {
+            return _productDal.GetAll();
+        }
+
         public void Update(Product entity)
         {
             _productDal.Update(entity);
