@@ -23,6 +23,9 @@ namespace ShopApp.WebUI
         {
             services.AddScoped<IProductDal, EfCoreProductDal>();
             services.AddScoped<IProductService, ProductManager>();
+
+            services.AddScoped<ICategoryDal, EfCoreCategoryDal>();
+            services.AddScoped<ICategoryService, CategoryManager>();
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2);
         }
 
