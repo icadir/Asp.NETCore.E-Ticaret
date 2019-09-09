@@ -9,11 +9,6 @@ namespace ShopApp.DataAccess.Concrete.EfCore
 {
     public class EfCoreProductDal : EfCoreGenericRepository<Product, ShopContext>, IProductDal
     {
-        public IEnumerable<Product> GetPopularProducts()
-        {
-            throw new NotImplementedException();
-        }
-
         public Product GetProductDetails(int id)
         {
             using (var context = new ShopContext())
@@ -24,6 +19,23 @@ namespace ShopApp.DataAccess.Concrete.EfCore
                     .ThenInclude(i => i.Category)
                     .FirstOrDefault();
             };
+        }
+
+        public List<Product> GetProductsByCategory(string category)
+        {
+            using (var context = new ShopContext())
+            {
+                var products = context.Products.AsQueryable();
+
+                if (!string.IsNullOrEmpty(category))
+                {
+                    products = products
+                            .Include(x => x.ProductCategories)
+                            .ThenInclude(x => x.Category)
+                            .Where(x => x.ProductCategories.Any(a => a.Category.Name.ToLower() == category.ToLower()));
+                }
+                return products.ToList();
+            }
         }
     }
 }
