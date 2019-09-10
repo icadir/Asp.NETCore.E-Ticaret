@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShopApp.DataAccess.Abstract;
 using ShopApp.Entities.Entities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,6 +8,23 @@ namespace ShopApp.DataAccess.Concrete.EfCore
 {
     public class EfCoreProductDal : EfCoreGenericRepository<Product, ShopContext>, IProductDal
     {
+        public int GetCountByCategory(string category)
+        {
+            using (var context = new ShopContext())
+            {
+                var products = context.Products.AsQueryable();
+
+                if (!string.IsNullOrEmpty(category))
+                {
+                    products = products
+                            .Include(x => x.ProductCategories)
+                            .ThenInclude(x => x.Category)
+                            .Where(x => x.ProductCategories.Any(a => a.Category.Name.ToLower() == category.ToLower()));
+                }
+                return products.Count();
+            }
+        }
+
         public Product GetProductDetails(int id)
         {
             using (var context = new ShopContext())

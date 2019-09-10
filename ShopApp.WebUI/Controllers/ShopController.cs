@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using ShopApp.Business.Abstract;
-using ShopApp.Entities.Entities;
 using ShopApp.WebUI.Models;
 
 namespace ShopApp.WebUI.Controllers
@@ -38,8 +34,15 @@ namespace ShopApp.WebUI.Controllers
         {
             return View(new ProductListModel()
             {
+                PageInfo = new PageInfo()
+                {
+                    TotalItems=_productService.GetCountByCategory(category),
+                    CurrentPage=page,
+                    ItemsPerPage=pageSize,
+                    CurrentCategory=category
+                },
                 Products = _productService.GetProductsByCategory(category, page, pageSize),
-            });
+            }); 
         }
     }
 }

@@ -4,8 +4,7 @@
 <div class="list-group">
     @foreach (var item in Model.Categories)
     {
-        <a
-           asp-controller="shop"
+        <a asp-controller="shop"
            asp-action="List"
            asp-route-category="@item.Name.ToLower()"
            class="list-group-item list-group-item-action @(Model.SelectedCategory==item.Name.ToLower()?"active":"")">
