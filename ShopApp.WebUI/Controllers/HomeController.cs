@@ -17,10 +17,10 @@ namespace ShopApp.WebUI.Controllers
         }
         public IActionResult Index()
         {
-            //return View(new ProductListModel()
-            //{
-            //    Products = _productService.GetPopulerProducts(),
-            //});
+            return View(new ProductListModel()
+            {
+                //Products = _productService.GetPopulerProducts(),
+            });
         }
     }
 }
