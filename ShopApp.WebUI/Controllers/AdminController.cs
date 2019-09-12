@@ -67,7 +67,7 @@ namespace ShopApp.WebUI.Controllers
         public IActionResult Edit(ProductModel model)
         {
             var entity = _productService.GetById(model.Id);
-            if (entity==null)
+            if (entity == null)
             {
                 return NotFound();
             }
@@ -77,6 +77,16 @@ namespace ShopApp.WebUI.Controllers
             entity.Price = model.Price;
             _productService.Update(entity);
 
+            return RedirectToAction("Index");
+        }
+        public IActionResult Delete(int productId)
+        {
+            var entity = _productService.GetById(productId);
+
+            if (entity != null)
+            {
+                _productService.Delete(entity);
+            }
             return RedirectToAction("Index");
         }
     }
