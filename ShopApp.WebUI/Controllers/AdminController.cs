@@ -20,7 +20,7 @@ namespace ShopApp.WebUI.Controllers
         {
             return View(new ProductListModel
             {
-                Products=_productService.GetAll()
+                Products = _productService.GetAll()
             });
         }
         [HttpGet]
@@ -39,7 +39,45 @@ namespace ShopApp.WebUI.Controllers
                 Price = model.Price
             };
             _productService.Create(entity);
-            return Redirect("Index");
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var entity = _productService.GetById((int)id);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            var model = new ProductModel()
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                Price = entity.Price,
+                Description = entity.Description,
+                ImageUrl = entity.ImageUrl
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult Edit(ProductModel model)
+        {
+            var entity = _productService.GetById(model.Id);
+            if (entity==null)
+            {
+                return NotFound();
+            }
+            entity.Name = model.Name;
+            entity.Price = model.Price;
+            entity.ImageUrl = model.ImageUrl;
+            entity.Price = model.Price;
+            _productService.Update(entity);
+
+            return RedirectToAction("Index");
         }
     }
 }
