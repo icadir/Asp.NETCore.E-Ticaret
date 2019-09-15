@@ -67,8 +67,9 @@ namespace ShopApp.WebUI.Controllers
             ViewBag.Categories = _categoryService.GetAll();
             return View(model);
         }
+
         [HttpPost]
-        public IActionResult EditProduct(ProductModel model)
+        public IActionResult EditProduct(ProductModel model, string[] categoryIds)
         {
             var entity = _productService.GetById(model.Id);
             if (entity == null)
@@ -79,7 +80,7 @@ namespace ShopApp.WebUI.Controllers
             entity.Price = model.Price;
             entity.ImageUrl = model.ImageUrl;
             entity.Price = model.Price;
-            _productService.Update(entity);
+            _productService.Update(entity,categoryIds);
 
             return RedirectToAction("ProductList");
         }
