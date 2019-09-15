@@ -92,7 +92,6 @@ namespace ShopApp.WebUI.Controllers
             return RedirectToAction("ProductList");
         }
 
-
         public IActionResult CategoryList()
         {
             return View(new CategoryListModel()
@@ -110,7 +109,7 @@ namespace ShopApp.WebUI.Controllers
         {
             var entity = new Category
             {
-                Name=model.Name,
+                Name = model.Name,
             };
             _categoryService.Create(entity);
             return RedirectToAction("CategoryList");
@@ -118,19 +117,20 @@ namespace ShopApp.WebUI.Controllers
         [HttpGet]
         public IActionResult EditCategory(int id)
         {
-            var entity = _categoryService.GetById(id);
+            var entity = _categoryService.GetByWithProducts(id);
 
             return View(new CategoryModel()
             {
                 Id = entity.Id,
-                Name = entity.Name
+                Name = entity.Name,
+                Products = entity.ProductCategories.Select(x => x.Product).ToList()
             });
         }
         [HttpPost]
         public IActionResult EditCategory(CategoryModel model)
         {
             var entity = _categoryService.GetById(model.Id);
-            if (entity==null)
+            if (entity == null)
             {
                 return NotFound();
             }
