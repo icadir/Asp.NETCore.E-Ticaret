@@ -29,20 +29,24 @@ namespace ShopApp.WebUI.Controllers
         [HttpGet]
         public IActionResult CreateProduct()
         {
-            return View();
+            return View(new ProductModel());
         }
         [HttpPost]
         public IActionResult CreateProduct(ProductModel model)
         {
-            var entity = new Product()
+            if (ModelState.IsValid)
             {
-                Description = model.Description,
-                ImageUrl = model.ImageUrl,
-                Name = model.Name,
-                Price = model.Price
-            };
-            _productService.Create(entity);
-            return RedirectToAction("ProductList");
+                var entity = new Product()
+                {
+                    Description = model.Description,
+                    ImageUrl = model.ImageUrl,
+                    Name = model.Name,
+                    Price = model.Price
+                };
+                _productService.Create(entity);
+                return RedirectToAction("ProductList");
+            }
+            return View(model);
         }
         public IActionResult EditProduct(int? id)
         {
@@ -69,7 +73,7 @@ namespace ShopApp.WebUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditProduct(ProductModel model, string[] categoryIds)
+        public IActionResult EditProduct(ProductModel model, int[] categoryIds)
         {
             var entity = _productService.GetById(model.Id);
             if (entity == null)
@@ -80,7 +84,7 @@ namespace ShopApp.WebUI.Controllers
             entity.Price = model.Price;
             entity.ImageUrl = model.ImageUrl;
             entity.Price = model.Price;
-            _productService.Update(entity,categoryIds);
+            _productService.Update(entity, categoryIds);
 
             return RedirectToAction("ProductList");
         }
@@ -155,10 +159,10 @@ namespace ShopApp.WebUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult DeleteFromCategory(int categoryId,int productId)
+        public IActionResult DeleteFromCategory(int categoryId, int productId)
         {
             _categoryService.DeleteFromCategory(categoryId, productId);
-            return Redirect("/admin/editcategory/"+ categoryId);
+            return Redirect("/admin/editcategory/" + categoryId);
         }
     }
 }
