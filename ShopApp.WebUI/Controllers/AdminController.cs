@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShopApp.Business.Abstract;
 using ShopApp.Entities.Entities;
@@ -78,21 +80,39 @@ namespace ShopApp.WebUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditProduct(ProductModel model, int[] categoryIds)
+        public async Task<IActionResult> EditProduct(ProductModel model, int[] categoryIds, IFormFile file)
         {
-            var entity = _productService.GetById(model.Id);
-            if (entity == null)
+            if (ModelState.IsValid)
             {
-                return NotFound();
+                var entity = _productService.GetById(model.Id);
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+                entity.Name = model.Name;
+                entity.Price = model.Price;
+                entity.Price = model.Price;
+                if (file != null)
+                {
+                    entity.ImageUrl = file.FileName;
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\img", file.FileName);
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+                }
+                _productService.Update(entity, categoryIds);
+                return RedirectToAction("ProductList");
             }
-            entity.Name = model.Name;
-            entity.Price = model.Price;
-            entity.ImageUrl = model.ImageUrl;
-            entity.Price = model.Price;
-            _productService.Update(entity, categoryIds);
-
-            return RedirectToAction("ProductList");
+            ViewBag.Categories = _categoryService.GetAll();
+            return View(model);
         }
+
+        private void CopyToAsync(FileStream stream)
+        {
+            throw new NotImplementedException();
+        }
+
         public IActionResult DeleteProduct(int productId)
         {
             var entity = _productService.GetById(productId);

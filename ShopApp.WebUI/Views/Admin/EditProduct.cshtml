@@ -2,11 +2,22 @@
 @{
     ViewData["Title"] = "EditProduct";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var counter = 0;
 }
 
 <h1>Edit Product</h1>
 <hr />
-<form asp-controller="Admin" asp-action="Edit" method="post">
+
+@section Scripts{
+    <script src="~/modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/modules/ckeditor/ckeditor.js"></script>
+    <script>
+    CKEDITOR.replace("editor");
+    </script>
+}
+<form asp-controller="Admin" asp-action="Edit" method="post" enctype="multipart/form-data">
+
     <div class="row">
         <div class="col-md-8">
 
@@ -20,7 +31,9 @@
             <div class="form-group row">
                 <label asp-for="ImageUrl" class="col-md-2 col-form-label"></label>
                 <div class="col-md-10">
-                    <input asp-for="ImageUrl" value="@Model.ImageUrl" class="form-control" />
+                    <input type="hidden" name="ImageUrl" value="@Model.ImageUrl" />
+                    <img src="~/img/@Model.ImageUrl" width="80" />
+                    <input type="file" name="file" value="" />
                 </div>
             </div>
             <div class="form-group row">
@@ -46,16 +59,30 @@
         <div class="col-md-4">
             @foreach (var item in (List<ShopApp.Entities.Entities.Category>)ViewBag.Categories)
             {
+                var IsChecked = "";
+                if (Model.SelectedCategories.Any(x => x.Id == item.Id))
+                {
+                    IsChecked = "checked";
+                    <input type="hidden" name="SelectedCategories[@counter].Id" value="@item.Id" />
+                    <input type="hidden" name="SelectedCategories[@counter].Id" value="@item.Name" />
+                    counter++;
+                }
+                else
+                {
+                    IsChecked = "";
+                }
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox"
                            name="categoryIds"
                            value="@item.Id"
                            class="custom-control-input"
                            id="category@(item.Id)"
-                           @(Model.SelectedCategories.Any(x => x.Id == item.Id) ? "checked" : "") />
+                           @IsChecked ) />
                     <label class="custom-control-label" for="category@(item.Id)">@item.Name</label>
                 </div>
+
             }
         </div>
     </div>
+
 </form>
