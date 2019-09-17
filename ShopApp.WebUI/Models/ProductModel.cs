@@ -1,17 +1,15 @@
 ﻿using ShopApp.Entities.Entities;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace ShopApp.WebUI.Models
 {
     public class ProductModel
     {
         public int Id { get; set; }
-        [Required]
-        [StringLength(60, MinimumLength =10,ErrorMessage ="Urun İsmi Minimum 10 karakter ve Maksimum 60 karakter olmalıdır.")]
+        //[Required]
+        //[StringLength(60, MinimumLength =10,ErrorMessage ="Urun İsmi Minimum 10 karakter ve Maksimum 60 karakter olmalıdır.")]
         public string Name { get; set; }
         [Required]
         public string ImageUrl { get; set; }
