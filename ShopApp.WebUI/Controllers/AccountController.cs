@@ -50,19 +50,23 @@ namespace ShopApp.WebUI.Controllers
             return View();
         }
 
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl=null)
         {
-            return View(new LoginModel());
+
+            return View(new LoginModel()
+            {
+                ReturnUrl = returnUrl
+            }); 
         }
+
         [HttpPost]
-        public async Task<IActionResult> Login(LoginModel model, string returnUrl = null)
+        public async Task<IActionResult> Login(LoginModel model)
         {
-            returnUrl = returnUrl ?? "~/";
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            var user = await _userManager.FindByNameAsync(model.Username);
+            var user = await _userManager.FindByNameAsync(model.Email);
 
             if (user == null)
             {
@@ -70,13 +74,13 @@ namespace ShopApp.WebUI.Controllers
                 return View(model);
             }
 
-            var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, true, false);
+            var result = await _signInManager.PasswordSignInAsync(user, model.Password, true, false);
 
             if (result.Succeeded)
             {
-                return Redirect(returnUrl);
+                return Redirect(model.ReturnUrl ?? "~/");
             }
-            ModelState.AddModelError("", "Kullanıcı adı veya parola yanlıs.");
+            ModelState.AddModelError("", "Email  veya parola yanlıs.");
 
             return View(model);
         }
