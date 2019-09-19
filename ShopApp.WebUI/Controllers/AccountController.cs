@@ -49,5 +49,36 @@ namespace ShopApp.WebUI.Controllers
             ModelState.AddModelError("", "Bilinmeyen hata olustu lütfen tekrar deneriniz.");
             return View();
         }
+
+        public IActionResult Login()
+        {
+            return View(new LoginModel());
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginModel model, string returnUrl = null)
+        {
+            returnUrl = returnUrl ?? "~/";
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await _userManager.FindByNameAsync(model.Username);
+
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Bu Kullanıcı ile Daha Önce Hesal Olusturulmamıstır.");
+                return View(model);
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, true, false);
+
+            if (result.Succeeded)
+            {
+                return Redirect(returnUrl);
+            }
+            ModelState.AddModelError("", "Kullanıcı adı veya parola yanlıs.");
+
+            return View(model);
+        }
     }
 }
