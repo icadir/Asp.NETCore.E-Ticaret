@@ -183,11 +183,11 @@ namespace ShopApp.WebUI.Controllers
                 return View(model);
             }
             var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user==null)
+            if (user == null)
             {
                 return RedirectToAction("Home", "Index");
             }
-            var result = await _userManager.ResetPasswordAsync(user, model.Token,model.Password);
+            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
             if (result.Succeeded)
             {
                 return RedirectToAction("Login", "Account");
