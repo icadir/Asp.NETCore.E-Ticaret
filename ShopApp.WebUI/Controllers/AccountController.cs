@@ -50,13 +50,13 @@ namespace ShopApp.WebUI.Controllers
             return View();
         }
 
-        public IActionResult Login(string returnUrl=null)
+        public IActionResult Login(string returnUrl = null)
         {
 
             return View(new LoginModel()
             {
                 ReturnUrl = returnUrl
-            }); 
+            });
         }
 
         [HttpPost]
@@ -83,6 +83,12 @@ namespace ShopApp.WebUI.Controllers
             ModelState.AddModelError("", "Email  veya parola yanlıs.");
 
             return View(model);
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return Redirect("~/");
         }
     }
 }
