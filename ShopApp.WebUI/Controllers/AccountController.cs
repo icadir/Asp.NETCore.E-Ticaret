@@ -132,5 +132,67 @@ namespace ShopApp.WebUI.Controllers
             TempData["message"] = "Hesabınız Onaylanmadı.";
             return View();
         }
+
+        public IActionResult ForgotPassword()
+        {
+
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(string Email)
+        {
+            if (string.IsNullOrEmpty(Email))
+            {
+                return View();
+            }
+            var user = await _userManager.FindByEmailAsync(Email);
+            if (user == null)
+            {
+                return View();
+            }
+
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var callbackUrl = Url.Action("ResetPassword", "Account", new
+            {
+                userId = user.Id,
+                token = code
+            });
+            // send email
+            await _emailSender.SendEmailAsync(Email, "Reset Password", $"Parolanızı yenilenemek için  like <a href='http://localhost:12344{callbackUrl}'tıklayınız.</a>");
+            return RedirectToAction("login", "account");
+        }
+
+        public IActionResult ResetPassword(string userId, string token)
+        {
+            if (userId == null || token == null)
+            {
+                return RedirectToAction("Home", "Index");
+            }
+            var model = new ResetPasswordModel
+            {
+                Token = token
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user==null)
+            {
+                return RedirectToAction("Home", "Index");
+            }
+            var result = await _userManager.ResetPasswordAsync(user, model.Token,model.Password);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            return View(model);
+        }
     }
 }

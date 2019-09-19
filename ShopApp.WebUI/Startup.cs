@@ -10,6 +10,7 @@ using ShopApp.Business.Abstract;
 using ShopApp.Business.Concrete;
 using ShopApp.DataAccess.Abstract;
 using ShopApp.DataAccess.Concrete.EfCore;
+using ShopApp.WebUI.EmailServices;
 using ShopApp.WebUI.Identity;
 using ShopApp.WebUI.Middlewares;
 using System;
@@ -73,7 +74,7 @@ namespace ShopApp.WebUI
             services.AddScoped<ICategoryDal, EfCoreCategoryDal>();
             services.AddScoped<ICategoryService, CategoryManager>();
 
-            services.AddTransient<IEmailSender,EmailSender>
+            services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2);
         }
