@@ -1,7 +1,4 @@
 ﻿using ShopApp.Entities.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ShopApp.Business.Abstract
 {
@@ -9,5 +6,6 @@ namespace ShopApp.Business.Abstract
     {
         void InitializeCart(string UserId);
         Cart GetCartByUserId(string userId);
+        void AddToCart(string userId, int productId, int quantity);
     }
 }
