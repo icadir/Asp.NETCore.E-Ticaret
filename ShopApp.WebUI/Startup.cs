@@ -61,26 +61,28 @@ namespace ShopApp.WebUI
                 options.SlidingExpiration = true;
                 options.Cookie = new CookieBuilder
                 {
-                    HttpOnly=true,
-                    Name="ShopApp.Security.Cookie",
-                    SameSite=SameSiteMode.Strict
+                    HttpOnly = true,
+                    Name = "ShopApp.Security.Cookie",
+                    SameSite = SameSiteMode.Strict
                 };
 
             });
 
 
             services.AddScoped<IProductDal, EfCoreProductDal>();
-            services.AddScoped<IProductService, ProductManager>();
             services.AddScoped<ICategoryDal, EfCoreCategoryDal>();
+            services.AddScoped<ICartDal, EfCoreCartDal>();
+
+
+            services.AddScoped<ICartService, CartManager>();
+            services.AddScoped<IProductService, ProductManager>();
             services.AddScoped<ICategoryService, CategoryManager>();
-
             services.AddTransient<IEmailSender, EmailSender>();
-
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env,UserManager<ApplicationUser> userManager,RoleManager<IdentityRole> roleManager)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {

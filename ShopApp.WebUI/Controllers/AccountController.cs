@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using ShopApp.Business.Abstract;
 using ShopApp.WebUI.Extensions;
 using ShopApp.WebUI.Identity;
 using ShopApp.WebUI.Models;
@@ -16,13 +17,15 @@ namespace ShopApp.WebUI.Controllers
     {
         private UserManager<ApplicationUser> _userManager;
         private SignInManager<ApplicationUser> _signInManager;
+        private ICartService _cartService;
         private IEmailSender _emailSender;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender, ICartService cartService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _cartService = cartService;
         }
         public IActionResult Register()
         {
@@ -59,9 +62,9 @@ namespace ShopApp.WebUI.Controllers
 
                 TempData.Put("message", new ResultMessage
                 {
-                    Title="Hesap Onayı",
-                    Message="Eposta Adresinize Gelen Link İle Hesabınızı Onaylayınız.",
-                    Css="warning"
+                    Title = "Hesap Onayı",
+                    Message = "Eposta Adresinize Gelen Link İle Hesabınızı Onaylayınız.",
+                    Css = "warning"
                 });
 
 
@@ -146,6 +149,10 @@ namespace ShopApp.WebUI.Controllers
                 var result = await _userManager.ConfirmEmailAsync(user, token);
                 if (result.Succeeded)
                 {
+
+                    //Create Cart Object
+                    _cartService.InitializeCart(user.Id);
+
                     TempData.Put("message", new ResultMessage
                     {
                         Title = "Hesap Onayı",
