@@ -10,6 +10,11 @@ namespace ShopApp.WebUI.Models
     {
         public int CartId { get; set; }
         public List<CartItemModel> CartItems { get; set; }
+
+        public decimal TotalPrice()
+        {
+            return CartItems.Sum(x => x.Price * x.Quantity);
+        }
     }
 
     public class CartItemModel
