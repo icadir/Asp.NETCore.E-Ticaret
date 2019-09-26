@@ -48,5 +48,9 @@ namespace ShopApp.WebUI.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult CheckOut()
+        {
+            return View();
+        }
     }
 }
