@@ -50,6 +50,24 @@ namespace ShopApp.WebUI.Controllers
 
         public IActionResult CheckOut()
         {
+
+            var cart = _cartService.GetCartByUserId(_userManager.GetUserId(User));
+
+            var orderModel = new OrderModel();
+
+            orderModel.CartModel = new CartModel
+            {
+                CartId = cart.Id,
+                CartItems = cart.CartItems.Select(x => new CartItemModel
+                {
+                    CartItemId = x.Id,
+                    ProductId = x.Product.Id,
+                    Name = x.Product.Name,
+                    Price = (decimal)x.Product.Price,
+                    ImageUrl = x.Product.ImageUrl,
+                    Quantity = x.Quantity
+                }).ToList()
+            };
             return View();
         }
     }

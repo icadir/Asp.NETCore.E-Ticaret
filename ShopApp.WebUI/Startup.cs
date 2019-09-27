@@ -112,7 +112,7 @@ namespace ShopApp.WebUI
                 routes.MapRoute(
             name: "checkout",
             template: "cart",
-            defaults: new { controller = "Cart", action = "checkout" }
+            defaults: new { controller = "Cart", action = "Checkout" }
             );
                 routes.MapRoute(
                 name: "products",
