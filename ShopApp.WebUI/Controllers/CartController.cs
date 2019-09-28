@@ -101,7 +101,7 @@ namespace ShopApp.WebUI.Controllers
                 if (payment.Status == "success")
                 {
                     SaveOrder(model, payment, userId);
-                    ClearCart(userId);
+                    ClearCart(cart.Id.ToString());
                     return View("Success");
                 }
                 //siparis
@@ -110,9 +110,9 @@ namespace ShopApp.WebUI.Controllers
             return View(model);
         }
 
-        private void ClearCart(string userId)
+        private void ClearCart(string cartId)
         {
-            throw new NotImplementedException();
+            _cartService.ClearCart(cartId);
         }
 
         private void SaveOrder(OrderModel model, Payment payment, string userId)
