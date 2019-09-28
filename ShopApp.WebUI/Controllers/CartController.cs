@@ -221,5 +221,39 @@ namespace ShopApp.WebUI.Controllers
             request.BasketItems = basketItems;
             return Payment.Create(request, options);
         }
+
+        public IActionResult GetOrders()
+        {
+            var orders = _orderService.GetOrders(_userManager.GetUserId(User));
+            var orderListModel = new List<OrderListModel>();
+            OrderListModel orderModel;
+
+            foreach (var order in orders)
+            {
+                orderModel = new OrderListModel();
+                orderModel.OrderId = order.Id;
+                orderModel.OrderNumber = order.OrderNumber;
+                orderModel.OrderDate = order.OrderDate;
+                orderModel.OrderNote = order.OrderNote;
+                orderModel.Phone = order.Phone;
+                orderModel.FirstName = order.FirstName;
+                orderModel.LastName = order.LastName;
+                orderModel.Email = order.Email;
+                orderModel.Address = order.Address;
+                orderModel.City = order.City;
+
+                orderModel.OrderItems = order.OrderItems.Select(x => new OrderItemModel()
+                {
+                    OrderItemId = x.Id,
+                    Name = x.Product.Name,
+                    Price = x.Price,
+                    Quantity = x.Quantity,
+                    ImageUrl = x.Product.ImageUrl
+                }).ToList();
+                orderListModel.Add(orderModel);
+            }
+
+            return View(orderListModel);
+        }
     }
 }
