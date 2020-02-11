@@ -58,6 +58,7 @@ namespace ShopApp.WebUI.Controllers
 
         public IActionResult CheckOut()
         {
+           
             var cart = _cartService.GetCartByUserId(_userManager.GetUserId(User));
             var orderModel = new OrderModel();
             orderModel.CartModel = new CartModel

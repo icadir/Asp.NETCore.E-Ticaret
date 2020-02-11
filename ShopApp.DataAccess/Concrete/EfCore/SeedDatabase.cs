@@ -9,13 +9,13 @@ namespace ShopApp.DataAccess.Concrete.EfCore
         public static void Seed()
         {
             var context = new ShopContext();
-            if (context.Database.GetPendingMigrations().Count() == 0)
+            if (!context.Database.GetPendingMigrations().Any())
             {
-                if (context.Categories.Count() == 0)
+                if (!context.Categories.Any())
                 {
                     context.Categories.AddRange(Categories);
                 }
-                if (context.Products.Count() == 0)
+                if (!context.Products.Any())
                 {
                     context.Products.AddRange(Products);
                     context.AddRange(ProductCategory);
